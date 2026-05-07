@@ -419,11 +419,18 @@ h1, h2, h3, h4, p, div, span, a, button, input, textarea, select, label {
 @media (max-width: 1024px) {
     .main-content {
         flex-direction: column;
+        gap: 20px;
     }
 
     .sidebar {
         flex: 1;
         max-width: 100%;
+        width: 100%;
+    }
+
+    .viewport-container {
+        min-width: auto;
+        width: 100%;
     }
 
     #three-canvas {
@@ -432,6 +439,15 @@ h1, h2, h3, h4, p, div, span, a, button, input, textarea, select, label {
 }
 
 @media (max-width: 768px) {
+    .app-container {
+        padding: 10px;
+    }
+
+    .app-header {
+        padding: 10px 0;
+        margin-bottom: 20px;
+    }
+
     .app-header h1 {
         font-size: 1.8rem;
     }
@@ -446,15 +462,74 @@ h1, h2, h3, h4, p, div, span, a, button, input, textarea, select, label {
 
     .control-panel,
     .results-panel,
-    .info-panel {
+    .info-panel,
+    .explanation-section,
+    .sin-theta-section,
+    .math-demonstration {
         padding: 15px;
     }
 
     #three-canvas {
-        height: 400px;
+        height: 350px;
     }
 
     .formula {
         font-size: 1.4rem;
+    }
+    
+    .mode-btn {
+        height: 40px;
+        font-size: 13px;
+        border-radius: 10px;
+    }
+
+    .result-item {
+        padding: 10px;
+    }
+
+    .result-value {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .subtitle {
+        font-size: 0.85rem;
+    }
+
+    #three-canvas {
+        height: 300px;
+    }
+
+    .viewport-info {
+        padding: 5px 12px;
+        bottom: 5px;
+        right: 10px;
+    }
+
+    .viewport-info p {
+        font-size: 0.75rem;
+    }
+
+    .mode-selector {
+        flex-direction: column;
+    }
+
+    .formula {
+        font-size: 1.1rem;
+    }
+
+    .control-group label {
+        font-size: 0.85rem;
+    }
+
+    .control-panel h3,
+    .results-panel h3,
+    .info-panel h3 {
+        font-size: 1.1rem;
     }
 }

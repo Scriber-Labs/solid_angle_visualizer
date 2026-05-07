@@ -96,6 +96,9 @@ h1, h2, h3, h4, p, div, span, a, button, input, textarea, select, label {
     display: flex;
     gap: 30px;
     min-height: 600px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
 }
 
 .sidebar {
@@ -222,6 +225,7 @@ h1, h2, h3, h4, p, div, span, a, button, input, textarea, select, label {
 
 .viewport-container {
     flex: 1;
+    min-width: 600px;
     position: relative;
     background: rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -307,6 +311,7 @@ h1, h2, h3, h4, p, div, span, a, button, input, textarea, select, label {
 
 /* Explanation section below sphere */
 .explanation-section {
+    width: 100%;
     margin-top: 30px;
     background: rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -338,6 +343,7 @@ h1, h2, h3, h4, p, div, span, a, button, input, textarea, select, label {
 }
 
 .math-demonstration {
+    width: 100%;
     margin-top: 30px;
     background: rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.1);

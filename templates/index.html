@@ -22,11 +22,11 @@
                     <div class="control-panel">
                         <h3 class="gradient_text2">Visualization Mode</h3>
                         <div class="mode-selector">
-                            <button id="mode-solid-angle" class="mode-btn active">Solid Angle<</button>
+                            <button id="mode-solid-angle" class="mode-btn active">Solid Angle</button>
                             <button id="mode-differential" class="mode-btn">Differential Solid Angle</button>
                         </div>
                     </div>
-                    <div class="control-panel" id="solid-angle-controles">
+                    <div class="control-panel" id="solid-angle-controls">
                         <h3 class="gradient_text2">Solid Angle Controls</h3>
                         <div class="control-group">
                             <label for="theta-start">
@@ -37,7 +37,7 @@
                             <input
                                 type="range"
                                 id="theta-start"
-                                min="0" max="Math.PI"
+                                min="0" max="3.14159"
                                 step="0.01" value="0"
                             >
                         </div>
@@ -50,8 +50,8 @@
                             <input
                                 type="range"
                                 id="theta-end"
-                                min="0" max="Math.PI"
-                                step="0.01" value="0.785398"
+                                min="0" max="3.14159"
+                                step="0.01" value="0.7854"
                             >
                         </div>
                         <div class="control-group">
@@ -63,7 +63,7 @@
                             <input
                                 type="range"
                                 id="phi-start"
-                                min="0" max="2*Math.PI"
+                                min="0" max="6.28319"
                                 step="0.01" value="0"
                             >
                         </div>
@@ -76,8 +76,8 @@
                             <input
                                 type="range"
                                 id="phi-end"
-                                min="0" max="2*Math.PI"
-                                step="0.01" value="2*Math.PI"
+                                min="0" max="6.28319"
+                                step="0.01" value="6.28319"
                             >
                         </div>
                         <div class="control-panel hidden" id="differential-controls">
@@ -91,8 +91,8 @@
                                 <input
                                     type="range"
                                     id="theta-diff"
-                                    min="0" max="Math.PI"
-                                    step="0.01" value="Math.PI/4"
+                                    min="0" max="3.14159"
+                                    step="0.01" value="0.7854"
                                 >
                             </div>
                             <div class="control-group">
@@ -127,13 +127,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="viewport-container">
-                        <div id="three-canvas"></div>
-                        <div class="viewport-info">
-                            <p class="text-content">
-                                Drag to rotate • Scroll to zoom • Right-click to pan
-                            </p>
-                        </div>
+                </div>
+                <div class="viewport-container">
+                    <div id="three-canvas"></div>
+                    <div class="viewport-info">
+                        <p class="text-content">
+                            Drag to rotate • Scroll to zoom • Right-click to pan
+                        </p>
                     </div>
                 </div>
 
@@ -148,10 +148,10 @@
                 </div>
 
                 <!-- Mathematical demonstration section -->
-                <div class="math-demonstration hidden" id="math-demo">
+                <div class="math-demonstration hidden" id="sin-theta-section">
                     <h3 class="gradient_text1">Mathematical Demonstration: $\sin{\theta}$ Scaling</h3>
                     <div class="demo-content">
-                        <div class="placeholder-content">
+                        <div class="placeholder-content" id="sin-theta-graph">
                             <p class="text-content">
                                 [Add your mathematical explanation here about how the surface area element scales with $\sin{\theta}$]
                             </p>

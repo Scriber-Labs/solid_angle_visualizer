@@ -651,7 +651,6 @@ function switchMode(mode) {
         document.getElementById('mode-solid-angle').classList.add('active');
         document.getElementById('solid-angle-controls').classList.remove('hidden');
         document.getElementById('differential-controls').classList.add('hidden');
-        document.getElementById('math-demo').classList.add('hidden');
         document.getElementById('sin-theta-display').classList.add('hidden');
         document.getElementById('explanation-section').classList.remove('hidden');
         document.getElementById('sin-theta-section').classList.add('hidden');
@@ -661,7 +660,6 @@ function switchMode(mode) {
         document.getElementById('mode-differential').classList.add('active');
         document.getElementById('solid-angle-controls').classList.add('hidden');
         document.getElementById('differential-controls').classList.remove('hidden');
-        document.getElementById('math-demo').classList.remove('hidden');
         document.getElementById('sin-theta-display').classList.remove('hidden');
         document.getElementById('explanation-section').classList.add('hidden');
         document.getElementById('sin-theta-section').classList.remove('hidden');
@@ -684,10 +682,17 @@ async function updateVisualization() {
 
 async function calculateSolidAngle() {
     try {
+        const payload = {
+            theta_start: params.solidAngle.thetaStart,
+            theta_end: params.solidAngle.thetaEnd,
+            phi_start: params.solidAngle.phiStart,
+            phi_end: params.solidAngle.phiEnd
+        };
+
         const response = await fetch('/api/calculate_solid_angle', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(params.solidAngle)
+            body: JSON.stringify(payload)
         });
 
         const data = await response.json();

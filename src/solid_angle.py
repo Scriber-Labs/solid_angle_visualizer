@@ -30,25 +30,25 @@ __all__: list[str] = [
     "generate_sphere_vertices",
 ]
 
-# --------------------------------------------------------------------------- #
-# 0️⃣ Type Aliases / protocols / constants
-# --------------------------------------------------------------------------- #
+# -----------------------------------------------------------------------------------------------------------
+# 0️⃣ Typing helpers / protocols / constants
+# -----------------------------------------------------------------------------------------------------------
 
 PI: Final[float] = float(np.pi)
 TWO_PI: Final[float] = 2.0 * PI
 
-# --------------------------------------------------------------------------- #
+# -----------------------------------------------------------------------------------------------------------
 # 1️⃣ Core definitions
-# --------------------------------------------------------------------------- #
+# -----------------------------------------------------------------------------------------------------------
 
 def clamp_theta(theta: float) -> float:
     """
-    Clamp theta to the valid spherical coordinate interval.
+    Clamp theta to the valid spherical coordinate interval [0, PI].
 
     Parameters
     ----------
     theta : float
-        Polar angle in radians
+        Polar angle in radians.
 
     Returns
     -------
@@ -57,26 +57,27 @@ def clamp_theta(theta: float) -> float:
     """
     return max(0.0, min(PI, theta))
 
+
 def clamp_phi(phi: float) -> float:
     """
-    Clamp phi to the valid azimuthal interval.
+    Clamp phi to the valid azimuthal interval [0, 2*PI].
 
     Parameters
-    -----------
+    ----------
     phi : float
-        Azimuthal angle in radians
+        Azimuthal angle in radians.
 
     Returns
-    ------
+    -------
     float
         Clamped azimuthal angle.
     """
     return max(0.0, min(TWO_PI, phi))
 
 
-# --------------------------------------------------------------------------- #
+# -----------------------------------------------------------------------------------------------------------
 # 2️⃣ Public API
-# --------------------------------------------------------------------------- #
+# -----------------------------------------------------------------------------------------------------------
 
 def calculate_solid_angle(
     theta_start: float,
@@ -91,28 +92,20 @@ def calculate_solid_angle(
     ----------
     theta_start : float
         Initial polar angle in radians.
-
     theta_end : float
         Final polar angle in radians.
-
     phi_start : float
         Initial azimuthal angle in radians.
-
     phi_end : float
         Final azimuthal angle in radians.
 
     Returns
     -------
     dict[str, float | list[float]]
-        Dictionary containing:
-        - solid angle
-        - surface area
-        - angular ranges
+        Dictionary containing solid angle, surface area, and angular ranges.
     """
-
     theta_start = clamp_theta(theta_start)
     theta_end = clamp_theta(theta_end)
-
     phi_start = clamp_phi(phi_start)
     phi_end = clamp_phi(phi_end)
 
@@ -127,10 +120,11 @@ def calculate_solid_angle(
         "phi_range": [phi_start, phi_end],
     }
 
+
 def calculate_differential_solid_angle(
     theta: float,
     dtheta: float,
-) -> dict[str, float]:
+) -> dict[str, float | list[float]]:
     """
     Compute a differential solid angle element.
 
@@ -138,49 +132,49 @@ def calculate_differential_solid_angle(
     ----------
     theta : float
         Polar angle in radians.
-
     dtheta : float
         Differential angular increment.
 
     Returns
     -------
-    dict[str, float]
-        Dictionary containing:
-        - differential solid angle
-        - local geometric quantities
+    dict[str, float | list[float]]
+        Dictionary containing differential solid angle and local geometric quantities.
     """
-
     theta = clamp_theta(theta)
     dtheta = max(0.01, min(0.5, dtheta))
 
     d_omega = TWO_PI * np.sin(theta) * dtheta
+
+    theta_start = theta - dtheta / 2.0
+    theta_end = theta + dtheta / 2.0
 
     return {
         "differential_solid_angle": float(d_omega),
         "surface_area": float(d_omega),
         "theta": float(theta),
         "dtheta": float(dtheta),
+        "theta_range": [float(theta_start), float(theta_end)],
         "sin_theta": float(np.sin(theta)),
         "theta_deg": float(np.degrees(theta)),
     }
 
+
 def generate_sphere_vertices(
     resolution: int,
-) -> np.ndarray:
+) -> list[list[float]]:
     """
     Generate Cartesian vertices on the unit sphere.
 
     Parameters
     ----------
     resolution : int
-        Angular discreteization resolution.
+        Angular discretization resolution.
 
     Returns
     -------
-    np.ndarray
-        Array of shape (N, 3) containing sphere vertices.
+    list[list[float]]
+        Nested list of shape (N, 3) containing sphere vertices.
     """
-
     theta = np.linspace(0.0, PI, resolution)
     phi = np.linspace(0.0, TWO_PI, resolution)
 
@@ -192,18 +186,19 @@ def generate_sphere_vertices(
             y = np.sin(t) * np.sin(p)
             z = np.cos(t)
 
-            vertices.append([x, y, z])
+            vertices.append([float(x), float(y), float(z)])
 
-    return np.asarray(vertices)
+    return vertices
 
-# --------------------------------------------------------------------------- #
-# 3️⃣ Smoke test
-# --------------------------------------------------------------------------- #
+
+# -----------------------------------------------------------------------------------------------------------
+# 3️⃣ Private helpers
+# -----------------------------------------------------------------------------------------------------------
+
 def _run_smoke_tests() -> None:
     """
     Sanity check: basic numerical operations for solid angle calculations.
     """
-
     print("💨 Kuramoto smoke test")
 
     result = calculate_solid_angle(
@@ -217,22 +212,38 @@ def _run_smoke_tests() -> None:
     print("    ✔️ solid angle calculation OK")
 
     vertices = generate_sphere_vertices(10)
-
-    assert vertices.shape[1] == 3
+    assert len(vertices) > 0
+    assert len(vertices[0]) == 3
     print("    ✔️ vertices shape OK")
+
+    diff_result = calculate_differential_solid_angle(theta=PI / 4, dtheta=0.1)
+    assert "theta_range" in diff_result
+    print("    ✔️ differential calculation OK")
 
     print("\n✅ solid_angle smoke test passed.")
 
+
+# -----------------------------------------------------------------------------------------------------------
+# 4️⃣ Smoke tests / example usage
+# -----------------------------------------------------------------------------------------------------------
+
+def run_smoke_test() -> None:
+    """
+    Public wrapper for smoke tests.
+    """
+    _run_smoke_tests()
+
+
+# -----------------------------------------------------------------------------------------------------------
+# 5️⃣ Entry point
+# -----------------------------------------------------------------------------------------------------------
 
 def main() -> None:
     """
     Execute main smoke tests.
     """
+    run_smoke_test()
 
-    _run_smoke_tests()
 
-# --------------------------------------------------------------------------- #
-# 4️⃣ Entry point
-# --------------------------------------------------------------------------- #
 if __name__ == "__main__":
     main()

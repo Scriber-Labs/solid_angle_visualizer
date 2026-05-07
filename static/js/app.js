@@ -88,6 +88,7 @@ function initOrbitControls() {
 }
 
 function onMouseDown(event) {
+    if (!controls) return;
     controls.mouseDown = true;
     controls.mouseButton = event.button;
     controls.mouseX = event.clientX;
@@ -95,7 +96,7 @@ function onMouseDown(event) {
 }
 
 function onMouseMove(event) {
-    if (!controls.mouseDown) return;
+    if (!controls || !controls.mouseDown) return;
 
     const deltaX = event.clientX - controls.mouseX;
     const deltaY = event.clientY - controls.mouseY;
@@ -113,10 +114,11 @@ function onMouseMove(event) {
 }
 
 function onMouseUp() {
-    controls.mouseDown = false;
+    if (controls) controls.mouseDown = false;
 }
 
 function onWheel(event) {
+    if (!controls) return;
     event.preventDefault();
     controls.zoom += event.deltaY * 0.001;
     controls.zoom = Math.max(1.5, Math.min(5, controls.zoom));
@@ -124,6 +126,7 @@ function onWheel(event) {
 }
 
 function updateCameraPosition() {
+    if (!camera || !controls) return;
     const radius = controls.zoom;
     camera.position.x = radius * Math.cos(controls.rotationX) * Math.sin(controls.rotationY);
     camera.position.y = radius * Math.sin(controls.rotationX);
@@ -248,7 +251,7 @@ function createAngleLabels() {
     scene.add(deltaThetaLabel);
 
     deltaOmegaFormulaLabel = createTextSprite('ΔΩ = 2πsin(θ)dθ', { r: 0, g: 232, b: 255, a: 1.0 });
-    deltaOmegaFormulaLabel.scale.set(0.8, 0.8, 1);
+    deltaOmegaFormulaLabel.scale.set(0.4, 0.4, 1);
     deltaOmegaFormulaLabel.visible = false;
     scene.add(deltaOmegaFormulaLabel);
 }
@@ -322,8 +325,19 @@ function createTextSprite(text, color) {
 }
 
 function updateSolidAngleVisualization() {
+    if (!solidAngleMesh) return;
+
     while (solidAngleMesh.children.length > 0) {
-        solidAngleMesh.remove(solidAngleMesh.children[0]);
+        const child = solidAngleMesh.children[0];
+        if (child.geometry) child.geometry.dispose();
+        if (child.material) {
+            if (Array.isArray(child.material)) {
+                child.material.forEach(m => m.dispose());
+            } else {
+                child.material.dispose();
+            }
+        }
+        solidAngleMesh.remove(child);
     }
 
     const thetaStart = params.solidAngle.thetaStart;
@@ -391,23 +405,34 @@ function updateSolidAngleVisualization() {
     updateSolidAngleLabels(thetaStart, thetaEnd, phiStart, phiEnd);
 
     // Show Mode 1 labels, hide Mode 2 labels
-    theta1Line.visible = true;
-    theta2Line.visible = true;
-    phi1Line.visible = true;
-    phi2Line.visible = true;
-    theta1Label.visible = true;
-    theta2Label.visible = true;
-    phi1Label.visible = true;
-    phi2Label.visible = true;
-    diffTheta1Line.visible = false;
-    diffTheta2Line.visible = false;
-    deltaThetaLabel.visible = false;
-    deltaOmegaFormulaLabel.visible = false;
+    if (theta1Line) theta1Line.visible = true;
+    if (theta2Line) theta2Line.visible = true;
+    if (phi1Line) phi1Line.visible = true;
+    if (phi2Line) phi2Line.visible = true;
+    if (theta1Label) theta1Label.visible = true;
+    if (theta2Label) theta2Label.visible = true;
+    if (phi1Label) phi1Label.visible = true;
+    if (phi2Label) phi2Label.visible = true;
+    if (diffTheta1Line) diffTheta1Line.visible = false;
+    if (diffTheta2Line) diffTheta2Line.visible = false;
+    if (deltaThetaLabel) deltaThetaLabel.visible = false;
+    if (deltaOmegaFormulaLabel) deltaOmegaFormulaLabel.visible = false;
 }
 
 function updateDifferentialVisualization() {
+    if (!differentialBandMesh) return;
+
     while (differentialBandMesh.children.length > 0) {
-        differentialBandMesh.remove(differentialBandMesh.children[0]);
+        const child = differentialBandMesh.children[0];
+        if (child.geometry) child.geometry.dispose();
+        if (child.material) {
+            if (Array.isArray(child.material)) {
+                child.material.forEach(m => m.dispose());
+            } else {
+                child.material.dispose();
+            }
+        }
+        differentialBandMesh.remove(child);
     }
 
     const theta = params.differential.theta;
@@ -472,20 +497,22 @@ function updateDifferentialVisualization() {
     differentialBandMesh.add(mesh);
 
     // Hide Mode 1 labels, show Mode 2 labels
-    theta1Line.visible = false;
-    theta2Line.visible = false;
-    phi1Line.visible = false;
-    phi2Line.visible = false;
-    theta1Label.visible = false;
-    theta2Label.visible = false;
-    phi1Label.visible = false;
-    phi2Label.visible = false;
-    diffTheta1Line.visible = true;
-    diffTheta2Line.visible = true;
-    deltaThetaLabel.visible = true;
-    deltaOmegaFormulaLabel.visible = true;
+    if (theta1Line) theta1Line.visible = false;
+    if (theta2Line) theta2Line.visible = false;
+    if (phi1Line) phi1Line.visible = false;
+    if (phi2Line) phi2Line.visible = false;
+    if (theta1Label) theta1Label.visible = false;
+    if (theta2Label) theta2Label.visible = false;
+    if (phi1Label) phi1Label.visible = false;
+    if (phi2Label) phi2Label.visible = false;
+    if (diffTheta1Line) diffTheta1Line.visible = true;
+    if (diffTheta2Line) diffTheta2Line.visible = true;
+    if (deltaThetaLabel) deltaThetaLabel.visible = true;
+    if (deltaOmegaFormulaLabel) deltaOmegaFormulaLabel.visible = true;
 
     // Update differential boundary lines (circles at theta1 and theta2)
+    if (!diffTheta1Line || !diffTheta2Line || !deltaThetaLabel || !deltaOmegaFormulaLabel) return;
+
     const circlePoints1 = [];
     const circlePoints2 = [];
     for (let i = 0; i <= 64; i++) {
@@ -526,6 +553,9 @@ function updateDifferentialVisualization() {
 }
 
 function updateSolidAngleLabels(thetaStart, thetaEnd, phiStart, phiEnd) {
+    if (!theta1Line || !theta2Line || !phi1Line || !phi2Line || 
+        !theta1Label || !theta2Label || !phi1Label || !phi2Label) return;
+
     const midPhi = (phiStart + phiEnd) / 2;
     const midTheta = (thetaStart + thetaEnd) / 2;
 
@@ -648,23 +678,47 @@ function switchMode(mode) {
     document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
 
     if (mode === 'solid-angle') {
-        document.getElementById('mode-solid-angle').classList.add('active');
-        document.getElementById('solid-angle-controls').classList.remove('hidden');
-        document.getElementById('differential-controls').classList.add('hidden');
-        document.getElementById('sin-theta-display').classList.add('hidden');
-        document.getElementById('explanation-section').classList.remove('hidden');
-        document.getElementById('sin-theta-section').classList.add('hidden');
-        solidAngleMesh.visible = true;
-        differentialBandMesh.visible = false;
+        const modeSolidAngleBtn = document.getElementById('mode-solid-angle');
+        if (modeSolidAngleBtn) modeSolidAngleBtn.classList.add('active');
+        
+        const solidAngleControls = document.getElementById('solid-angle-controls');
+        if (solidAngleControls) solidAngleControls.classList.remove('hidden');
+        
+        const differentialControls = document.getElementById('differential-controls');
+        if (differentialControls) differentialControls.classList.add('hidden');
+        
+        const sinThetaDisplay = document.getElementById('sin-theta-display');
+        if (sinThetaDisplay) sinThetaDisplay.classList.add('hidden');
+        
+        const explanationSection = document.getElementById('explanation-section');
+        if (explanationSection) explanationSection.classList.remove('hidden');
+        
+        const sinThetaSection = document.getElementById('sin-theta-section');
+        if (sinThetaSection) sinThetaSection.classList.add('hidden');
+        
+        if (solidAngleMesh) solidAngleMesh.visible = true;
+        if (differentialBandMesh) differentialBandMesh.visible = false;
     } else {
-        document.getElementById('mode-differential').classList.add('active');
-        document.getElementById('solid-angle-controls').classList.add('hidden');
-        document.getElementById('differential-controls').classList.remove('hidden');
-        document.getElementById('sin-theta-display').classList.remove('hidden');
-        document.getElementById('explanation-section').classList.add('hidden');
-        document.getElementById('sin-theta-section').classList.remove('hidden');
-        solidAngleMesh.visible = false;
-        differentialBandMesh.visible = true;
+        const modeDifferentialBtn = document.getElementById('mode-differential');
+        if (modeDifferentialBtn) modeDifferentialBtn.classList.add('active');
+        
+        const solidAngleControls = document.getElementById('solid-angle-controls');
+        if (solidAngleControls) solidAngleControls.classList.add('hidden');
+        
+        const differentialControls = document.getElementById('differential-controls');
+        if (differentialControls) differentialControls.classList.remove('hidden');
+        
+        const sinThetaDisplay = document.getElementById('sin-theta-display');
+        if (sinThetaDisplay) sinThetaDisplay.classList.remove('hidden');
+        
+        const explanationSection = document.getElementById('explanation-section');
+        if (explanationSection) explanationSection.classList.add('hidden');
+        
+        const sinThetaSection = document.getElementById('sin-theta-section');
+        if (sinThetaSection) sinThetaSection.classList.remove('hidden');
+        
+        if (solidAngleMesh) solidAngleMesh.visible = false;
+        if (differentialBandMesh) differentialBandMesh.visible = true;
     }
 
     updateVisualization();
@@ -672,11 +726,18 @@ function switchMode(mode) {
 
 async function updateVisualization() {
     if (currentMode === 'solid-angle') {
-        updateSolidAngleVisualization();
+        if (solidAngleMesh) {
+            updateSolidAngleVisualization();
+        }
         await calculateSolidAngle();
     } else {
-        updateDifferentialVisualization();
+        if (differentialBandMesh) {
+            updateDifferentialVisualization();
+        }
         await calculateDifferential();
+    }
+    if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise();
     }
 }
 
@@ -697,10 +758,15 @@ async function calculateSolidAngle() {
 
         const data = await response.json();
 
-        document.getElementById('solid-angle-result').textContent =
-            `${data.solid_angle.toFixed(3)} sr`;
-        document.getElementById('surface-area-result').textContent =
-            `${data.surface_area.toFixed(3)} units²`;
+        const solidAngleRes = document.getElementById('solid-angle-result');
+        if (solidAngleRes) solidAngleRes.textContent = `${data.solid_angle.toFixed(3)} sr`;
+        
+        const surfaceAreaRes = document.getElementById('surface-area-result');
+        if (surfaceAreaRes) surfaceAreaRes.textContent = `${data.surface_area.toFixed(3)} units²`;
+
+        if (window.MathJax && window.MathJax.typesetPromise) {
+            window.MathJax.typesetPromise();
+        }
     } catch (error) {
         console.error('Error calculating solid angle:', error);
     }
@@ -716,14 +782,20 @@ async function calculateDifferential() {
 
         const data = await response.json();
 
-        document.getElementById('solid-angle-result').textContent =
-            `${data.differential_solid_angle.toFixed(3)} sr`;
-        document.getElementById('surface-area-result').textContent =
-            `${data.surface_area.toFixed(3)} units²`;
-        document.getElementById('sin-theta-result').textContent =
-            `${data.sin_theta.toFixed(3)}`;
+        const solidAngleRes = document.getElementById('solid-angle-result');
+        if (solidAngleRes) solidAngleRes.textContent = `${data.differential_solid_angle.toFixed(3)} sr`;
+        
+        const surfaceAreaRes = document.getElementById('surface-area-result');
+        if (surfaceAreaRes) surfaceAreaRes.textContent = `${data.surface_area.toFixed(3)} units²`;
+        
+        const sinThetaRes = document.getElementById('sin-theta-result');
+        if (sinThetaRes) sinThetaRes.textContent = `${data.sin_theta.toFixed(3)}`;
 
         updateSinThetaGraph(data.theta, data.sin_theta);
+
+        if (window.MathJax && window.MathJax.typesetPromise) {
+            window.MathJax.typesetPromise();
+        }
     } catch (error) {
         console.error('Error calculating differential:', error);
     }
@@ -867,6 +939,7 @@ function updateSinThetaGraph(theta, sinTheta) {
 
 function onWindowResize() {
     const container = document.getElementById('three-canvas');
+    if (!container || !camera || !renderer) return;
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(container.clientWidth, container.clientHeight);

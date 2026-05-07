@@ -5,10 +5,15 @@
     box-sizing: border-box;
 }
 
-body {
-    font-family: 'Aclonica', sans-serif;
+html, body {
     margin: 0;
     padding: 0;
+    width: 100%;
+    min-height: 100vh;
+}
+
+body {
+    font-family: 'Aclonica', sans-serif;
     color: white;
     background-color: #121212;
     background-image: url('/static/images/wisp.jpg');
@@ -18,6 +23,11 @@ body {
     background-attachment: fixed;
     min-height: 100vh;
     overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
 }
 
 /* Semi-transparent overlay for better content visibility */
@@ -33,9 +43,12 @@ body::before {
 }
 
 .app-container {
+    width: 100%;
     max-width: 1600px;
     margin: 0 auto;
     padding: 20px;
+    margin-bottom: 40px; /* Space between content and sticky footer */
+    flex: 1;
 }
 
 /* Typography improvements */
@@ -99,6 +112,7 @@ h1, h2, h3, h4, p, div, span, a, button, input, textarea, select, label {
     flex-wrap: wrap;
     justify-content: center;
     align-items: flex-start;
+    flex: 1;
 }
 
 .sidebar {
@@ -416,6 +430,28 @@ h1, h2, h3, h4, p, div, span, a, button, input, textarea, select, label {
     background: linear-gradient(to right, #00ffee, #27aaff);
 }
 
+/* ----- FOOTER ----- */
+.footer {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    text-align: center;
+    padding: 1.5rem 1rem;
+    color: #8b949e;
+    margin-top: auto;
+    margin-bottom: 0 !important;
+    padding-bottom: 1.5rem; /* Ensure consistent padding */
+    flex-shrink: 0;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* ----- MEDIA QUERIES ----- */
 @media (max-width: 1024px) {
     .main-content {
         flex-direction: column;

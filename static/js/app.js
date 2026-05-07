@@ -245,12 +245,12 @@ function createAngleLabels() {
     diffTheta2Line.visible = false;
     scene.add(diffTheta2Line);
 
-    deltaThetaLabel = createTextSprite('Δθ', { r: 0, g: 232, b: 255, a: 1.0 });
-    deltaThetaLabel.scale.set(0.5, 0.5, 1);
+    deltaThetaLabel = createTextSprite('dθ', { r: 0, g: 232, b: 255, a: 1.0 });
+    deltaThetaLabel.scale.set(0.4, 0.4, 1);
     deltaThetaLabel.visible = false;
     scene.add(deltaThetaLabel);
 
-    deltaOmegaFormulaLabel = createTextSprite('ΔΩ = 2πsin(θ)dθ', { r: 0, g: 232, b: 255, a: 1.0 });
+    deltaOmegaFormulaLabel = createTextSprite('sin(θ)', { r: 0, g: 232, b: 255, a: 1.0 });
     deltaOmegaFormulaLabel.scale.set(0.4, 0.4, 1);
     deltaOmegaFormulaLabel.visible = false;
     scene.add(deltaOmegaFormulaLabel);
@@ -534,7 +534,7 @@ function updateDifferentialVisualization() {
     diffTheta1Line.geometry.setFromPoints(circlePoints1);
     diffTheta2Line.geometry.setFromPoints(circlePoints2);
 
-    // Position Δθ label between the two circles
+    // Position dθ label between the two circles
     const labelTheta = theta;
     const labelPhi = Math.PI / 2; // Position on side
     deltaThetaLabel.position.set(
@@ -543,12 +543,12 @@ function updateDifferentialVisualization() {
         Math.cos(labelTheta) * 1.35
     );
 
-    // Position ΔΩ formula label in front
+    // Position sin(θ) label (showing the radius of the ring)
     const formulaPhi = 0;
     deltaOmegaFormulaLabel.position.set(
-        Math.sin(labelTheta) * Math.cos(formulaPhi) * 1.5,
-        Math.sin(labelTheta) * Math.sin(formulaPhi) * 1.5,
-        Math.cos(labelTheta) * 1.5
+        Math.sin(labelTheta) * Math.cos(formulaPhi) * 1.1,
+        Math.sin(labelTheta) * Math.sin(formulaPhi) * 1.1,
+        Math.cos(labelTheta) * 1.1
     );
 }
 

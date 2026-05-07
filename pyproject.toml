@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 
 authors = [
-    { name = "Lauren Shriver" }
+    { name = "Eigenscribe" }
 ]
 
 dependencies = [

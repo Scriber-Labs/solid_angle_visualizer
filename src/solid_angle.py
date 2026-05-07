@@ -24,8 +24,14 @@ from typing import Final
 
 import numpy as np
 
+__all__: list[str] = [
+    "calculate_differential_solid_angle",
+    "calculate_solid_angle",
+    "generate_sphere_vertices",
+]
+
 # --------------------------------------------------------------------------- #
-# 0️⃣ Typing helpers / protocols / constants
+# 0️⃣ Type Aliases / protocols / constants
 # --------------------------------------------------------------------------- #
 
 PI: Final[float] = float(np.pi)

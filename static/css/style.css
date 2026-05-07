@@ -1,0 +1,442 @@
+/* Main styling with glass morphism and Aclonica font */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Aclonica', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: white;
+    background-color: #121212;
+    background-image: url('/static/images/wisp.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Semi-transparent overlay for better content visibility */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+.app-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Typography improvements */
+h1, h2, h3, h4, p, div, span, a, button, input, textarea, select, label {
+    font-family: 'Aclonica', sans-serif;
+}
+
+.app-header {
+    text-align: center;
+    padding: 20px 0;
+    margin-bottom: 30px;
+}
+
+.app-header h1 {
+    font-size: 2.5rem;
+    font-family: 'Aclonica', sans-serif;
+    margin-bottom: 10px;
+}
+
+/* Gradient text styles - matching provided CSS */
+.gradient_text1 {
+    font-weight: bold !important;
+    background: linear-gradient(to right bottom, #00e8ff, #14b5ff, #3a98ff, #0070eb) !important;
+    background-image: -webkit-linear-gradient(to right bottom, #00e8ff, #14b5ff, #3a98ff, #0070eb) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: transparent !important;
+    text-align: center;
+}
+
+.gradient_text2 {
+    font-weight: bold;
+    background: linear-gradient(to right bottom, #00e8ff, #14b5ff, #3a98ff, #0070eb);
+    background-image: -webkit-linear-gradient(to right bottom, #00e8ff, #14b5ff, #3a98ff, #0070eb);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.gradient_text3 {
+    font-weight: bold;
+    background: linear-gradient(to right bottom, #00e8ff, #14b5ff, #3a98ff, #0070eb);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.subtitle {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+
+.main-content {
+    display: flex;
+    gap: 30px;
+    min-height: 600px;
+}
+
+.sidebar {
+    flex: 0 0 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Glass morphism panels */
+.control-panel,
+.results-panel,
+.info-panel {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(20, 181, 255, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.control-panel:hover,
+.results-panel:hover,
+.info-panel:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.control-panel h3,
+.results-panel h3,
+.info-panel h3 {
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    font-family: 'Aclonica', sans-serif;
+    text-align: center;
+}
+
+.mode-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+/* Button Styling matching provided CSS */
+.mode-btn {
+    flex: 1;
+    background-image: linear-gradient(to right bottom, #00e8ff, #14b5ff, #3a98ff, #0070eb);
+    box-shadow: 0 4px 15px 0 rgba(39, 170, 255, 0.5);
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    height: 45px;
+    text-align: center;
+    border: none;
+    background-size: 300% 100%;
+    border-radius: 12px;
+    transition: all .4s ease-in-out;
+    font-family: 'Aclonica', sans-serif;
+}
+
+.mode-btn:hover {
+    background-position: 100% 0;
+    background-image: linear-gradient(to right, #00e8ff, #0070eb);
+    filter: brightness(1.1);
+    transition: all .4s ease-in-out;
+}
+
+.mode-btn.active {
+    background-image: linear-gradient(to right, #00e8ff, #0070eb);
+    box-shadow: 0 6px 20px rgba(20, 181, 255, 0.7);
+}
+
+.control-group {
+    margin-bottom: 20px;
+}
+
+.control-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: white;
+    font-family: 'Aclonica', sans-serif;
+    font-size: 0.9rem;
+}
+
+/* Slider styling matching provided CSS */
+.control-group input[type="range"] {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.control-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #14b5ff;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 0 8px rgba(20, 181, 255, 0.7);
+    transition: all 0.2s ease;
+}
+
+.control-group input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(20, 181, 255, 1);
+}
+
+.control-group input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: #14b5ff;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 0 8px rgba(20, 181, 255, 0.7);
+}
+
+.viewport-container {
+    flex: 1;
+    position: relative;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(20, 181, 255, 0.15);
+}
+
+#three-canvas {
+    width: 100%;
+    height: 600px;
+}
+
+.viewport-info {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+}
+
+.viewport-info p {
+    color: white;
+    font-size: 0.85rem;
+    font-family: 'Aclonica', sans-serif;
+}
+
+.results-panel {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border-left: 3px solid #14b5ff;
+}
+
+.result-label {
+    color: white;
+    font-family: 'Aclonica', sans-serif;
+    font-weight: 400;
+    font-size: 0.9rem;
+}
+
+.result-value {
+    color: #FFFFFF;
+    font-family: 'Aclonica', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    background: linear-gradient(to right, #00e8ff, #3a98ff);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.text-content {
+    color: white !important;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.placeholder-content {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px 0;
+    min-height: 80px;
+}
+
+/* Explanation section below sphere */
+.explanation-section {
+    margin-top: 30px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(20, 181, 255, 0.15);
+}
+
+.explanation-section h3 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Sin theta section for differential mode */
+.sin-theta-section {
+    margin-top: 30px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(20, 181, 255, 0.15);
+}
+
+.sin-theta-section h3 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.math-demonstration {
+    margin-top: 30px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(20, 181, 255, 0.15);
+}
+
+.demo-content {
+    margin-top: 20px;
+}
+
+.formula-display {
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(20, 181, 255, 0.3);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.formula {
+    color: #00e8ff;
+    font-family: 'Aclonica', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    font-style: italic;
+}
+
+.visual-demo {
+    min-height: 200px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 15px;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to right bottom, #00e8ff, #14b5ff, #3a98ff, #0070eb);
+    border-radius: 10px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to right, #00ffee, #27aaff);
+}
+
+@media (max-width: 1024px) {
+    .main-content {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        flex: 1;
+        max-width: 100%;
+    }
+
+    #three-canvas {
+        height: 500px;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .subtitle {
+        font-size: 0.95rem;
+    }
+
+    .sidebar {
+        gap: 15px;
+    }
+
+    .control-panel,
+    .results-panel,
+    .info-panel {
+        padding: 15px;
+    }
+
+    #three-canvas {
+        height: 400px;
+    }
+
+    .formula {
+        font-size: 1.4rem;
+    }
+}

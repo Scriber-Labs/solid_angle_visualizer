@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>3D Solid Angle Visualizer</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Aclonica&display=swap">
+        <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.min.js"></script>
+    </head>
+
+    <body>
+        <div class="app-container">
+            <header class="app-header">
+                <h1 class="gradient_text1">3D Sphere Solid Angle Visualizer</h1>
+                <p class="subtitle">
+                    Interactive visualization of solid angle geometry on a unit sphere.
+                </p>
+            </header>
+            <div class="main-content">
+                <div class="sidebar">
+                    <div class="control-panel">
+                        <h3 class="gradient_text2">Visualization Mode</h3>
+                        <div class="mode-selector">
+                            <button id="mode-solid-angle" class="mode-btn active">Solid Angle<</button>
+                            <button id="mode-differential" class="mode-btn">Differential Solid Angle</button>
+                        </div>
+                    </div>
+                    <div class="control-panel" id="solid-angle-controles">
+                        <h3 class="gradient_text2">Solid Angle Controls</h3>
+                        <div class="control-group">
+                            <label for="theta-start">
+                                Polar Angle Start ($\theta_1$):
+                                <span id="theta-start-value">0.00</span>
+                                rad
+                            </label>
+                            <input
+                                type="range"
+                                id="theta-start"
+                                min="0" max="Math.PI"
+                                step="0.01" value="0"
+                            >
+                        </div>
+                        <div class="control-group">
+                            <label for="theta-end">
+                                Polar Angle End ($\theta_2$):
+                                <span id="theta-end-value">0.79</span>
+                                rad
+                            </label>
+                            <input
+                                type="range"
+                                id="theta-end"
+                                min="0" max="Math.PI"
+                                step="0.01" value="0.785398"
+                            >
+                        </div>
+                        <div class="control-group">
+                            <label for="phi-start">
+                                Azimuthal Start ($\phi_1$):
+                                <span id="phi-start-value">0.00</span>
+                                rad
+                            </label>
+                            <input
+                                type="range"
+                                id="phi-start"
+                                min="0" max="2*Math.PI"
+                                step="0.01" value="0"
+                            >
+                        </div>
+                        <div class="control-group">
+                            <label for="phi-end">
+                                Azimuthal End ($\phi_2$):
+                                <span id="phi-end-value">6.28</span>
+                                rad
+                            </label>
+                            <input
+                                type="range"
+                                id="phi-end"
+                                min="0" max="2*Math.PI"
+                                step="0.01" value="2*Math.PI"
+                            >
+                        </div>
+                        <div class="control-panel hidden" id="differential-controls">
+                            <h3 class="gradient_text2">Differential Controls</h3>
+                            <div class="control-group">
+                                <label for="theta-diff">
+                                    Polar Angle ($\theta$):
+                                    <span id="theta-diff-value">0.79</span>
+                                    rad
+                                </label>
+                                <input
+                                    type="range"
+                                    id="theta-diff"
+                                    min="0" max="Math.PI"
+                                    step="0.01" value="Math.PI/4"
+                                >
+                            </div>
+                            <div class="control-group">
+                                <label for="dtheta">
+                                    Angular Width ($d \, \theta$):
+                                    <span id="dtheta-value">0.16</span>
+                                    rad
+                                </label>
+                                <input
+                                    type="range"
+                                    id="dtheta"
+                                    min="0.01" max="0.5"
+                                    step="0.01" value="0.157079"
+                                >
+                            </div>
+                        </div>
+                        <div class="results-panel">
+                            <h3 class="gradient_text3">Calculations</h3>
+                            <div id="results-display">
+                                <div class="result-item">
+                                    <span class="results-label">Solid Angle ($\Omega$):</span>
+                                    <span class="result-value" id="solid-angle-result">1.840 sr</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="results-label">Surface Area:</span>
+                                    <span class="result-value" id="surface-area-result">1.840 $\mathrm{units}^2$</span>
+                                </div>
+                                <div class="result-item hidden" id="sin-theta-display">
+                                    <span class="result-label">$\sin{\theta}$</span>
+                                    <span class="result-value" id="sin-theta-result">0.707</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="viewport-container">
+                        <div id="three-canvas"></div>
+                        <div class="viewport-info">
+                            <p class="text-content">
+                                Drag to rotate • Scroll to zoom • Right-click to pan
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explanation section moved below sphere (hidden in differential mode) -->
+                <div class="explanation-section" id="explanation-section">
+                    <h3 class="gradient_text2">Explanation Section</h3>
+                    <div class="placeholder-content">
+                        <p class="text-content">
+                            [Add your explanation here about solid angles and their geometric interpretation]
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Mathematical demonstration section -->
+                <div class="math-demonstration hidden" id="math-demo">
+                    <h3 class="gradient_text1">Mathematical Demonstration: $\sin{\theta}$ Scaling</h3>
+                    <div class="demo-content">
+                        <div class="placeholder-content">
+                            <p class="text-content">
+                                [Add your mathematical explanation here about how the surface area element scales with $\sin{\theta}$]
+                            </p>
+                        </div>
+                        <div class="formula-display">
+                            <p class="formula">
+                                $$d\Omega = 2\pi \sin{\theta} d \, \theta$$
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    </body>
+</html>
